@@ -28,21 +28,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-//import { BackgroundBeams } from "./ui/background-beam";
-import clsx from "clsx";
-import { toast } from "sonner";
 import { BackgroundBeams } from "@/components/ui/background-beams";
+import { toast } from "sonner";
 import { getModelsName } from "../actions/getmodelsname";
 
 export const formSchema = z.object({
   brandname: z.enum(["samsung", "nokia", "realme", "oneplus"]),
   modelname: z.string().min(1, { message: "field is empty" }),
-  costprice: z
+  sellingprice: z
     .string()
     .min(1, { message: "field is empty" })
     .refine((val) => !isNaN(val), { message: "value must be a number" }),
-  purchasedfrom: z.string().min(1, { message: "field is empty" }),
-  purchasedate: z.string().optional(),
+  soldto: z.string().min(1, { message: "field is empty" }),
+  soldon: z.string().optional(),
   quantity: z
     .string()
     .min(1, { message: "field is empty" })
@@ -52,11 +50,11 @@ export const formSchema = z.object({
 });
 const resolver = zodResolver(formSchema);
 
-// FORM COMPONENT
-export default function PurchasingForm() {
-  const [Addnew, setAddnew] = useState(false);
+//MAin Component
+const SellProductForm = () => {
   const [Modelnames, setModelnames] = useState([]);
   const [IsLoading, setIsLoading] = useState(false);
+  const [brands, setBrands] = useState([])
 
   const options = {
     timeZone: "Asia/Kolkata", // Set the time zone to IST
@@ -68,7 +66,7 @@ export default function PurchasingForm() {
     resolver: resolver,
     defaultValues: {
       brandname: "samsung",
-      purchasedate: new Date().toLocaleString("en-US", options),
+      soldon: new Date().toLocaleString("en-US", options),
     },
   });
 
@@ -76,6 +74,7 @@ export default function PurchasingForm() {
   var brandname = form.watch("brandname");
   var storage = form.watch("storage");
   var ram = form.watch("ram");
+
   //Fetching all modelnames /api/AddedProducts/modelname
   useEffect(() => {
     const fetchModelNames = async () => {
@@ -84,13 +83,12 @@ export default function PurchasingForm() {
       //console.log(models)
 
       if (response.uniquemodels.length === 0) {
-        setAddnew(true);
         form.setValue("modelname", "");
         setModelnames([]);
       } else {
-        setAddnew(false);
         //Set Modelnames state
         setModelnames(response.uniquemodels);
+        setBrands(response.uniquebrands)
 
         // Set default value of modelname to the first element of the modelname array of output object
         form.setValue("modelname", response.uniquemodels[0] ?? "");
@@ -106,78 +104,54 @@ export default function PurchasingForm() {
   }, [brandname, form.formState.isSubmitSuccessful]);
 
   const onSubmit = async (data) => {
-    if (!Addnew) {
-      try {
-        const response = await fetch(`/api/AddedProducts/`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
+    try {
+      const response = await fetch(`/api/SoldProducts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-        if (response.ok) {
-          const responseData = await response.json();
-          console.log("Data Updated successfully:", responseData);
-          toast.success("Form submitted successfully");
-        } else {
-          console.error("failed to add product");
-          toast.error("Error while submitting the form");
-        }
-      } catch (error) {
-        console.error(error);
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Data inserted successfully:", responseData);
+        toast.success("Form submitted successfully");
+      } else {
+        const responseData = await response.json();
+        console.error(
+          `failed to add product, Message: ${responseData.message}`
+        );
+        console.error(response.ok);
+        toast.error("Error while submitting the form");
       }
-    } else {
-      try {
-        const response = await fetch(`/api/AddedProducts/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (response.ok) {
-          const responseData = await response.json();
-          console.log("Data inserted successfully:", responseData);
-          toast.success(
-            <p className=" bg-white text-green-600">
-              Form submitted successfully
-            </p>
-          );
-        } else {
-          console.error("failed to add product");
-          toast.error("Error while submitting the form");
-        }
-      } catch (error) {
-        console.error(error);
-      }
+    } catch (error) {
+      console.error(error);
     }
+    //toast.success("Form submitted successfully");
   };
 
   useEffect(() => {
     if (form.formState.isSubmitSuccessful) {
       form.reset({
         brandname: brandname,
-        costprice: "",
-        purchasedfrom: "",
-        purchasedate: new Date().toLocaleString("en-US", options),
+        sellingprice: "",
+        soldto: "",
+        soldon: new Date().toLocaleString("en-US", options),
         quantity: "",
         storage: storage,
         ram: ram,
       });
-
-      setAddnew(false);
     }
   }, [form.formState.isSubmitSuccessful]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center w-full p-10">
-      <Card className="w-full md:w-[80%] lg:w-[50%] z-10  flex flex-col items-center bg-transparent border-[4px] border-white">
+    <div className="flex min-h-screen flex-col items-center justify-between p-24 w-full">
+      <Card className="w-full md:w-[80%] lg:w-[50%] z-10 flex flex-col items-center bg-transparent border-[4px] border-white">
         <CardHeader>
-          <CardTitle>Purchasing</CardTitle>
+          <CardTitle>Selling</CardTitle>
           <CardDescription>
-            fill this form whenever you purchase mobile
+            fill this form whenever you sell mobile
           </CardDescription>
         </CardHeader>
 
@@ -204,10 +178,12 @@ export default function PurchasingForm() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="samsung">SAMSUNG</SelectItem>
-                        <SelectItem value="nokia">NOKIA</SelectItem>
-                        <SelectItem value="oneplus">ONEPLUS</SelectItem>
-                        <SelectItem value="realme">REALME</SelectItem>
+                      {
+                        brands.map( brand => (
+
+                          <SelectItem value={brand} key={brand}>{brand.toUpperCase()}</SelectItem>
+                        ))
+                      }
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -215,78 +191,57 @@ export default function PurchasingForm() {
                 )}
               />
 
-              {!IsLoading && (
-                <div className="flex w-full flex-col">
-                  <span
-                    className={clsx("", {
-                      hidden: Addnew,
-                    })}
-                  >
-                    <FormField
-                      control={form.control}
-                      name="modelname"
-                      key={1}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Model Name</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select Model" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {Modelnames.map((data) => (
-                                <SelectItem key={data} value={data}>
-                                  {data.toUpperCase()}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </span>
-
-                  {Addnew && (
-                    <FormField
-                      name="modelname"
-                      key={2}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Model Name</FormLabel>
-
-                          <FormControl>
-                            <Input
-                              placeholder="Model Name"
-                              type="text"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+              {IsLoading ? (
+                <p>Loading ModelNames...</p>
+              ) : (
+                <FormField
+                  control={form.control}
+                  name="modelname"
+                  key={1}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Model Name</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Model" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {Modelnames.map((data) => (
+                            <SelectItem key={data} value={data}>
+                              {data.toUpperCase()}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                  <Button
-                    onClick={() => setAddnew(!Addnew)}
-                    type="button"
-                    className="mt-4"
-                  >
-                    {Addnew ? "Cancel" : "Add New Model"}
-                  </Button>
-                </div>
+                />
               )}
 
-              <FormField
-                name="costprice"
+              {/* <FormField
+                name="modelname"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Cost Price</FormLabel>
+                    <FormLabel>Model Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Model Name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              /> */}
+
+              <FormField
+                name="sellingprice"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Selling Price</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Cost of Single Piece"
@@ -302,10 +257,10 @@ export default function PurchasingForm() {
               />
 
               <FormField
-                name="purchasedfrom"
+                name="soldto"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Purchased From</FormLabel>
+                    <FormLabel>Sold to</FormLabel>
                     <FormControl>
                       <Input placeholder="Supplier's Name" {...field} />
                     </FormControl>
@@ -315,7 +270,7 @@ export default function PurchasingForm() {
               />
 
               <FormField
-                name="purchasedate"
+                name="soldon"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -429,4 +384,6 @@ export default function PurchasingForm() {
       <BackgroundBeams />
     </div>
   );
-}
+};
+
+export default SellProductForm;

@@ -1,7 +1,38 @@
+"use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import HomeSearchInput from "./components/HomeSearchInput";
+import StockList from "./components/StockList";
 
 export default function Home() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/api/Search/empty`);
+        if (!response.ok) {
+          throw new Error("Response not ok while fetching search query");
+        }
+        const data = await response.json();
+        setData(data.products);
+        //console.log(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  //SET UNIQUE BRANDS
+  var Brands = data.reduce((brand, mobile) => {
+    brand.push(mobile.brandname);
+    return brand;
+  }, []);
+  var uniqueBrands = [...new Set(Brands)];
+
+
   return (
     <>
       <nav className="flex my-4 justify-around">
@@ -13,7 +44,7 @@ export default function Home() {
       </nav>
 
       <header className="flex flex-col w-full justify-center items-center">
-        <HomeSearchInput />
+        <HomeSearchInput setData={setData}/>
 
         <div className="flex flex-col md:flex-row md:justify-evenly w-[80%]">
           <button className=" my-2 shadow-[0_4px_14px_0_rgb(0,118,255,39%)] hover:shadow-[0_6px_20px_rgba(0,118,255,23%)] hover:bg-[rgba(0,118,255,0.9)] px-8 py-2 bg-[#0070f3] rounded-md text-white font-light transition duration-200 ease-linear">
@@ -21,10 +52,14 @@ export default function Home() {
           </button>
 
           <button className=" my-2 shadow-[0_4px_14px_0_rgb(0,118,255,39%)] hover:shadow-[0_6px_20px_rgba(0,118,255,23%)] hover:bg-[rgba(0,118,255,0.9)] px-8 py-2 bg-[#0070f3] rounded-md text-white font-light transition duration-200 ease-linear">
-            <Link href={"/"}>Sell Product</Link>
+            <Link href={"/SellProduct"}>Sell Product</Link>
           </button>
         </div>
       </header>
+
+      <div className="flex flex-col w-full justify-center items-center">
+        <StockList data={data} uniqueBrands={uniqueBrands} />
+      </div>
     </>
   );
 }
