@@ -29,7 +29,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 //import { BackgroundBeams } from "./ui/background-beam";
-import clsx from "clsx";
 import { toast } from "sonner";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { getModelsName } from "../actions/getmodelsname";
@@ -47,8 +46,8 @@ export const formSchema = z.object({
     .string()
     .min(1, { message: "field is empty" })
     .refine((val) => !isNaN(val), { message: "value must be a number" }),
-  storage: z.enum(["64GB", "128GB", "256GB"]),
-  ram: z.enum(["6GB", "8GB", "12GB"]),
+  storage: z.enum(["64GB", "128GB", "256GB", "32GB"]),
+  ram: z.enum([ "3GB", "4GB", "6GB", "8GB", "12GB"]),
 });
 const resolver = zodResolver(formSchema);
 
@@ -83,7 +82,7 @@ export default function PurchasingForm() {
       const response = await getModelsName(brandname);
       //console.log(models)
 
-      if (response.uniquemodels.length === 0) {
+      if (response.uniquemodels == null) {
         setAddnew(true);
         form.setValue("modelname", "");
         setModelnames([]);
@@ -208,6 +207,7 @@ export default function PurchasingForm() {
                         <SelectItem value="nokia">NOKIA</SelectItem>
                         <SelectItem value="oneplus">ONEPLUS</SelectItem>
                         <SelectItem value="realme">REALME</SelectItem>
+                        <SelectItem value="redmi">REDMI</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -215,71 +215,66 @@ export default function PurchasingForm() {
                 )}
               />
 
-              {!IsLoading && (
-                <div className="flex w-full flex-col">
-                  <span
-                    className={clsx("", {
-                      hidden: Addnew,
-                    })}
-                  >
-                    <FormField
-                      control={form.control}
-                      name="modelname"
-                      key={1}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Model Name</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select Model" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {Modelnames.map((data) => (
-                                <SelectItem key={data} value={data}>
-                                  {data.toUpperCase()}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </span>
-
-                  {Addnew && (
-                    <FormField
-                      name="modelname"
-                      key={2}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Model Name</FormLabel>
-
-                          <FormControl>
-                            <Input
-                              placeholder="Model Name"
-                              type="text"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+              {Addnew ? (
+                <FormField
+                  name="modelname"
+                  key={2}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Model Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Model Name"
+                          type="text"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                  <Button
-                    onClick={() => setAddnew(!Addnew)}
-                    type="button"
-                    className="mt-4"
-                  >
-                    {Addnew ? "Cancel" : "Add New Model"}
-                  </Button>
-                </div>
+                />
+              ) : (
+                !IsLoading && (
+                  <div className="flex w-full flex-col">
+                    <span>
+                      <FormField
+                        control={form.control}
+                        name="modelname"
+                        key={1}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Model Name</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select Model" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {Modelnames.map((data) => (
+                                  <SelectItem key={data} value={data}>
+                                    {data.toUpperCase()}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </span>
+                    <Button
+                      onClick={() => setAddnew(!Addnew)}
+                      type="button"
+                      className="mt-4"
+                    >
+                      {Addnew ? "Cancel" : "Add New Model"}
+                    </Button>
+                  </div>
+                )
               )}
 
               <FormField
@@ -361,6 +356,7 @@ export default function PurchasingForm() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
+                        <SelectItem value="32GB">32GB</SelectItem>
                         <SelectItem value="64GB">64GB</SelectItem>
                         <SelectItem value="128GB">128GB</SelectItem>
                         <SelectItem value="256GB">256GB</SelectItem>
@@ -387,6 +383,8 @@ export default function PurchasingForm() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
+                        <SelectItem value="3GB">3GB</SelectItem>
+                        <SelectItem value="4GB">4GB</SelectItem>
                         <SelectItem value="6GB">6GB</SelectItem>
                         <SelectItem value="8GB">8GB</SelectItem>
                         <SelectItem value="12GB">12GB</SelectItem>

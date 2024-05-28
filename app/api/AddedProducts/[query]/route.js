@@ -38,11 +38,8 @@ export async function GET(request, { params }) {
         headers: { "Content-Type": "application/json" },
       });
     } else {
-      const model = params.query.split("-")[0];
-      const specs =
-        params.query.split("-")[1] +
-        "/" +
-        params.query.split("-")[2];
+      const model = params.query.split("-").slice(0, -2).join("-");
+      const specs = params.query.split("-").slice(-2).join("/")
       const ModelWithSpecs = model + " " + specs;
       console.log("Fetching product details from AddedProducts...");
 

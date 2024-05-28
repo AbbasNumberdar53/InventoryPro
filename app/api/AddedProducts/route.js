@@ -58,7 +58,8 @@ export async function POST(request) {
     const body = await request.json();
     //console.log(body);
 
-    const modelname = removeWhitespaceAndCapitalize(body.modelname);
+    // const modelname = removeWhitespaceAndCapitalize(body.modelname);
+    const modelname = body.modelname.split(" ").join("-");
 
     const insertdata = {
       brandname: body.brandname,

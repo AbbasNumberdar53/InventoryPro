@@ -146,8 +146,8 @@ const SellProductForm = () => {
   }, [form.formState.isSubmitSuccessful]);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-between p-24 w-full">
-      <Card className="w-full md:w-[80%] lg:w-[50%] z-10 flex flex-col items-center bg-transparent border-[4px] border-white">
+    <div className="flex min-h-screen items-center justify-center w-full p-10">
+      <Card className="w-full md:w-[80%] lg:w-[50%] z-10  flex flex-col items-center bg-transparent border-[4px] border-white">
         <CardHeader>
           <CardTitle>Selling</CardTitle>
           <CardDescription>
