@@ -33,7 +33,7 @@ import { toast } from "sonner";
 import { getModelsName } from "../actions/getmodelsname";
 
 export const formSchema = z.object({
-  brandname: z.enum(["samsung", "nokia", "realme", "oneplus", "redmi"]),
+  brandname: z.enum(["samsung", "nokia", "realme", "oneplus", "redmi", "moto"]),
   modelname: z.string().min(1, { message: "field is empty" }),
   sellingprice: z
     .string()
