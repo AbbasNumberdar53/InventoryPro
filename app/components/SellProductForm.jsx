@@ -57,10 +57,11 @@ const SellProductForm = () => {
   const [brands, setBrands] = useState([])
 
   const options = {
-    timeZone: "Asia/Kolkata", // Set the time zone to IST
+    timeZone: "Asia/Kuwait", // Set the time zone to Kuwait's timezone
     timeZoneName: "short", // Display the time zone abbreviation
     hour12: false, // Use 24-hour format
   };
+  
 
   const form = useForm({
     resolver: resolver,
@@ -192,7 +193,7 @@ const SellProductForm = () => {
               />
 
               {IsLoading ? (
-                <p>Loading ModelNames...</p>
+                <Input placeholder="Loading..." disabled/>
               ) : (
                 <FormField
                   control={form.control}

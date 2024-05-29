@@ -17,8 +17,7 @@ export async function POST(request) {
       });
     }
 
-    var model = removeWhitespaceAndCapitalize(body.modelname);
-    model = `${model} ${body.ram}/${body.storage}`;
+    const model = `${body.modelname} ${body.ram}/${body.storage}`;
 
     const insertdata = {
       brandname: body.brandname,

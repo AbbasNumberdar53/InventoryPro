@@ -16,22 +16,31 @@ export async function GET(request, { params }) {
 
       console.log("Fetching product details from SoldProducts...");
 
-      const model = params.query.split("-")[0];
-      const specs =
-        params.query.split("-")[1] + "/" + params.query.split("-")[2];
+      const model = params.query.split("-").slice(0, -2).join("-");
+      const specs = params.query.split("-").slice(-2).join("/")
       const ModelWithSpecs = model + " " + specs;
-      console.log("Fetching product details from AddedProducts...");
+
+      console.log(ModelWithSpecs);
 
       const ProductDetails = await collection.findOne({
         modelname: ModelWithSpecs,
       });
 
-      console.log("Product details fetched successfully!!");
+      if(ProductDetails !== null){
 
-      return new Response(JSON.stringify({ ProductDetails, ok: true }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      });
+        console.log("Product details fetched successfully!!");
+  
+        return new Response(JSON.stringify({ ProductDetails, ok: true }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      }else{
+        return new Response(JSON.stringify({ok: false }), {
+          status: 404,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
     } else {
       return new Response(
         JSON.stringify({ message: "id is null", ok: false }),

@@ -58,10 +58,11 @@ export default function PurchasingForm() {
   const [IsLoading, setIsLoading] = useState(false);
 
   const options = {
-    timeZone: "Asia/Kolkata", // Set the time zone to IST
+    timeZone: "Asia/Kuwait", // Set the time zone to Kuwait's timezone
     timeZoneName: "short", // Display the time zone abbreviation
     hour12: false, // Use 24-hour format
   };
+  
 
   const form = useForm({
     resolver: resolver,

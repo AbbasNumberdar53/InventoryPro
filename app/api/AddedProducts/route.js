@@ -108,9 +108,8 @@ export async function PUT(request) {
     const collection = db.collection("AddedProducts");
 
     if (Object.keys(body).length !== 0) {
-      // Assuming removeWhitespaceAndCapitalize is defined elsewhere
-      var model = removeWhitespaceAndCapitalize(body.modelname);
-      model = `${model} ${body.ram}/${body.storage}`;
+
+      const model = `${body.modelname} ${body.ram}/${body.storage}`;
       const findmodel = await collection.findOne({ modelname: model });
 
       if (findmodel !== null) {
@@ -185,17 +184,3 @@ export async function PUT(request) {
   }
 }
 
-function removeWhitespaceAndCapitalize(str) {
-  // Split the string into an array of words
-  const words = str.split(/\s+/);
-
-  // Capitalize the first letter of each word and remove whitespace
-  const modifiedWords = words.map(
-    (word) => word.charAt(0).toUpperCase() + word.slice(1)
-  );
-
-  // Join the modified words into a single string
-  const result = modifiedWords.join("");
-
-  return result;
-}
