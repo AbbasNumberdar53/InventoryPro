@@ -33,7 +33,7 @@ import { toast } from "sonner";
 import { getModelsName } from "../actions/getmodelsname";
 
 export const formSchema = z.object({
-  brandname: z.enum(["samsung", "nokia", "realme", "oneplus"]),
+  brandname: z.enum(["samsung", "nokia", "realme", "oneplus", "redmi"]),
   modelname: z.string().min(1, { message: "field is empty" }),
   sellingprice: z
     .string()
@@ -45,8 +45,8 @@ export const formSchema = z.object({
     .string()
     .min(1, { message: "field is empty" })
     .refine((val) => !isNaN(val), { message: "value must be a number" }),
-  storage: z.enum(["64GB", "128GB", "256GB"]),
-  ram: z.enum(["6GB", "8GB", "12GB"]),
+  storage: z.enum(["32GB", "64GB", "128GB", "256GB"]),
+  ram: z.enum([ "3GB", "4GB", "6GB", "8GB", "12GB"]),
 });
 const resolver = zodResolver(formSchema);
 
@@ -246,7 +246,6 @@ const SellProductForm = () => {
                       <Input
                         placeholder="Cost of Single Piece"
                         type="string"
-                        inputMode="numeric"
                         {...field}
                         // onChange={handleCostPriceChange}
                       />
@@ -316,6 +315,7 @@ const SellProductForm = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
+                      <SelectItem value="32GB">32GB</SelectItem>
                         <SelectItem value="64GB">64GB</SelectItem>
                         <SelectItem value="128GB">128GB</SelectItem>
                         <SelectItem value="256GB">256GB</SelectItem>
@@ -342,6 +342,8 @@ const SellProductForm = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
+                      <SelectItem value="3GB">3GB</SelectItem>
+                        <SelectItem value="4GB">4GB</SelectItem>
                         <SelectItem value="6GB">6GB</SelectItem>
                         <SelectItem value="8GB">8GB</SelectItem>
                         <SelectItem value="12GB">12GB</SelectItem>

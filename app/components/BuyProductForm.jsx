@@ -34,7 +34,7 @@ import { BackgroundBeams } from "@/components/ui/background-beams";
 import { getModelsName } from "../actions/getmodelsname";
 
 export const formSchema = z.object({
-  brandname: z.enum(["samsung", "nokia", "realme", "oneplus"]),
+  brandname: z.enum(["samsung", "nokia", "realme", "oneplus", "redmi"]),
   modelname: z.string().min(1, { message: "field is empty" }),
   costprice: z
     .string()
@@ -286,7 +286,6 @@ export default function PurchasingForm() {
                       <Input
                         placeholder="Cost of Single Piece"
                         type="string"
-                        inputMode="numeric"
                         {...field}
                         // onChange={handleCostPriceChange}
                       />
