@@ -9,7 +9,6 @@ import {
 import Link from "next/link";
 import clsx from "clsx";
 
-
 const StockList = ({ data, uniqueBrands }) => {
   return (
     <>
@@ -45,20 +44,21 @@ const StockList = ({ data, uniqueBrands }) => {
                         <TableRow key={mobile._id} className="grid-cols-2">
                           <TableCell className="font-medium w-1/2 text-center">
                             <Link href={`ProductDetails/${ModelWithSpecs}`}>
-                              {model.split("-").join(" ") +
-                                ` (${mobile.modelname.split(" ")[1]})`}
+                              <div>
+                                {model.split("-").join(" ") +
+                                  ` (${mobile.modelname.split(" ")[1]})`}
+                              </div>
                             </Link>
                           </TableCell>
                           <TableCell className="w-1/2 text-center">
                             <Link href={`ProductDetails/${ModelWithSpecs}`}>
                               <div
                                 className={clsx("", {
-                                  'text-yellow-500': mobile.stock < 5,
-                                  'text-red-600': mobile.stock === 0,
+                                  "text-yellow-500": mobile.stock < 5,
+                                  "text-red-600": mobile.stock === 0,
                                 })}
                               >
-
-                              {mobile.stock}
+                                {mobile.stock}
                               </div>
                             </Link>
                           </TableCell>
