@@ -31,6 +31,7 @@ import {
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { toast } from "sonner";
 import { getModelsName } from "../actions/getmodelsname";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const formSchema = z.object({
   brandname: z.enum(["samsung", "nokia", "realme", "oneplus", "redmi", "moto"]),
@@ -193,8 +194,8 @@ const SellProductForm = () => {
               />
 
               {IsLoading ? (
-                <Input placeholder="Loading..." disabled/>
-              ) : (
+                  <Skeleton className={"h-10"}/>
+                ) : (
                 <FormField
                   control={form.control}
                   name="modelname"
