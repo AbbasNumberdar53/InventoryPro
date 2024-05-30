@@ -384,7 +384,7 @@ const SellProductForm = () => {
           </Form>
         </CardContent>
       </Card>
-      <BackgroundBeams />
+      <BackgroundBeams className = {"hidden lg:block"}/>
     </div>
   );
 };
