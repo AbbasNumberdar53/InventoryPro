@@ -54,7 +54,7 @@ const StockList = ({ data, uniqueBrands }) => {
                             <Link href={`ProductDetails/${ModelWithSpecs}`}>
                               <div
                                 className={clsx("", {
-                                  "text-yellow-500": mobile.stock < 5,
+                                  "text-yellow-500": mobile.stock < 5 && mobile.stock !== 0,
                                   "text-red-600": mobile.stock === 0,
                                 })}
                               >
