@@ -31,7 +31,7 @@ import {
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { toast } from "sonner";
 import { getModelsName } from "../actions/getmodelsname";
-import { Skeleton } from "@/components/ui/skeleton";
+import FormSkeleton from "./Skeleton/FormSkeleton";
 
 export const formSchema = z.object({
   brandname: z.enum(["samsung", "nokia", "realme", "oneplus", "redmi", "moto"]),
@@ -148,8 +148,11 @@ const SellProductForm = () => {
   }, [form.formState.isSubmitSuccessful]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center w-full p-10">
-      <Card className="w-full md:w-[80%] lg:w-[50%] z-10  flex flex-col items-center bg-transparent border-[4px] border-white">
+    IsLoading ? (
+      <FormSkeleton type="sell"/>
+    ) : (
+      <div className="flex min-h-screen items-center justify-center w-full p-10">
+      <Card className="w-full md:w-[80%] lg:w-[50%] lg:z-10  flex flex-col items-center bg-transparent border-[4px] border-white">
         <CardHeader>
           <CardTitle>Selling</CardTitle>
           <CardDescription>
@@ -193,9 +196,6 @@ const SellProductForm = () => {
                 )}
               />
 
-              {IsLoading ? (
-                  <Skeleton className={"h-10"}/>
-                ) : (
                 <FormField
                   control={form.control}
                   name="modelname"
@@ -224,7 +224,6 @@ const SellProductForm = () => {
                     </FormItem>
                   )}
                 />
-              )}
 
               {/* <FormField
                 name="modelname"
@@ -387,6 +386,7 @@ const SellProductForm = () => {
       </Card>
       <BackgroundBeams className = {"hidden lg:block"}/>
     </div>
+    )
   );
 };
 

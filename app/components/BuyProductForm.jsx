@@ -32,7 +32,7 @@ import {
 import { toast } from "sonner";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { getModelsName } from "../actions/getmodelsname";
-import { Skeleton } from "@/components/ui/skeleton";
+import FormSkeleton from "./Skeleton/FormSkeleton";
 
 export const formSchema = z.object({
   brandname: z.enum(["samsung", "nokia", "realme", "oneplus", "redmi", "moto"]),
@@ -172,8 +172,12 @@ export default function PurchasingForm() {
   }, [form.formState.isSubmitSuccessful]);
 
   return (
+    IsLoading ? (
+      <FormSkeleton type="purchase"/>
+    ) : (
+
     <div className="flex min-h-screen items-center justify-center w-full p-10">
-      <Card className="w-full md:w-[80%] lg:w-[50%] z-10  flex flex-col items-center bg-transparent border-[4px] border-white">
+      <Card className="w-full md:w-[80%] lg:w-[50%] lg:z-10  flex flex-col items-center bg-transparent border-[4px] border-white">
         <CardHeader>
           <CardTitle>Purchasing</CardTitle>
           <CardDescription>
@@ -235,12 +239,6 @@ export default function PurchasingForm() {
                     </FormItem>
                   )}
                 />
-              ) : IsLoading ? (
-                <div>
-
-                  <Skeleton className={"h-10 mb-4"}/>
-                  <Skeleton className={"h-10"}/>
-                </div>
               ) : (
                 <div className="flex w-full flex-col">
                   <span>
@@ -431,5 +429,6 @@ export default function PurchasingForm() {
       </Card>
       <BackgroundBeams className={"hidden lg:block"} />
     </div>
+    )
   );
 }
