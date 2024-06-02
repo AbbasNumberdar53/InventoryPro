@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,8 +17,17 @@ export default function RootLayout({ children }) {
         <title>Inventory-Pro</title>
       </head>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>{children}</ThemeProvider>
-        <Toaster position="bottom-center" richColors closeButton/>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <nav className="flex my-4 justify-around">
+            <h1 className="font-bold text-2xl text-blue-500">InventoryPro</h1>
+
+            <button className="mx-10 inline-flex h-12 items-center justify-center rounded-md border border-blue-500 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+              Log In
+            </button>
+          </nav>
+          {children}
+        </ThemeProvider>
+        <Toaster position="bottom-center" richColors closeButton />
       </body>
     </html>
   );

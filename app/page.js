@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import HomeSearchInput from "./components/HomeSearchInput";
-import StockList from "./components/StockList";
+import HomeSearchInput from "./components/home/HomeSearchInput";
+import StockList from "./components/home/StockList";
 
 export default function Home() {
   const [data, setData] = useState([]);
@@ -29,19 +29,6 @@ export default function Home() {
 
   return (
     <>
-      <nav className="flex my-4 justify-around">
-        <h1 className="font-bold text-2xl text-blue-500">InventoryPro</h1>
-        {isLoggedIn ? (
-          <button className="mx-10 inline-flex h-12 items-center justify-center rounded-md border border-blue-500 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-            Log Out
-          </button>
-        ) : (
-          <button className="mx-10 inline-flex h-12 items-center justify-center rounded-md border border-blue-500 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-            Log In
-          </button>
-        )}
-      </nav>
-
       <header className="flex flex-col w-full justify-center items-center">
         <HomeSearchInput setData={setData} />
 

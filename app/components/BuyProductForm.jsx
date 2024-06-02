@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -53,7 +53,7 @@ export const formSchema = z.object({
 const resolver = zodResolver(formSchema);
 
 // FORM COMPONENT
-export default function PurchasingForm() {
+const PurchasingForm = React.memo(() => {
   const [Addnew, setAddnew] = useState(false);
   const [Modelnames, setModelnames] = useState([]);
   const [IsLoading, setIsLoading] = useState(false);
@@ -171,11 +171,9 @@ export default function PurchasingForm() {
     }
   }, [form.formState.isSubmitSuccessful]);
 
-  return (
-    IsLoading ? (
-      <FormSkeleton type="purchase"/>
-    ) : (
-
+  return IsLoading ? (
+    <FormSkeleton type="purchase" />
+  ) : (
     <div className="flex min-h-screen items-center justify-center w-full p-10">
       <Card className="w-full md:w-[80%] lg:w-[50%] lg:z-10  flex flex-col items-center bg-transparent border-[4px] border-white">
         <CardHeader>
@@ -429,6 +427,7 @@ export default function PurchasingForm() {
       </Card>
       <BackgroundBeams className={"hidden lg:block"} />
     </div>
-    )
   );
-}
+});
+
+export default PurchasingForm;

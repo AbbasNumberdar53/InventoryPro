@@ -8,8 +8,9 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import clsx from "clsx";
+import React from "react";
 
-const StockList = ({ data, uniqueBrands }) => {
+const StockList = React.memo(({ data, uniqueBrands }) => {
   return (
     <>
       {data && (
@@ -54,7 +55,8 @@ const StockList = ({ data, uniqueBrands }) => {
                             <Link href={`ProductDetails/${ModelWithSpecs}`}>
                               <div
                                 className={clsx("", {
-                                  "text-yellow-500": mobile.stock < 5 && mobile.stock !== 0,
+                                  "text-yellow-500":
+                                    mobile.stock < 5 && mobile.stock !== 0,
                                   "text-red-600": mobile.stock === 0,
                                 })}
                               >
@@ -73,6 +75,5 @@ const StockList = ({ data, uniqueBrands }) => {
       )}
     </>
   );
-};
-
+});
 export default StockList;
