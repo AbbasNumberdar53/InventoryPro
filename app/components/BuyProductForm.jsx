@@ -430,4 +430,6 @@ const PurchasingForm = React.memo(() => {
   );
 });
 
+PurchasingForm.displayName = 'PurchasingForm'
+
 export default PurchasingForm;

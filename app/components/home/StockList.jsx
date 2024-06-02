@@ -76,4 +76,6 @@ const StockList = React.memo(({ data, uniqueBrands }) => {
     </>
   );
 });
+
+StockList.displayName ='StockList'
 export default StockList;
